@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { InvestmentResultsService } from '../investment-results/investment-results.service';
+import { UserInput } from './user-input.model';
 
 @Component({
   selector: 'app-user-input',
@@ -13,12 +15,16 @@ export class UserInputComponent {
   duration = signal<string>('');
   expectedReturn = signal<string>('');
   isSubmited = signal<boolean>(false);
+  private investmentResultsService = inject(InvestmentResultsService);
 
   onSubmit() {
-    console.log(`Initial Investment: ${this.initialInvestment()}`);
-    console.log(`Annual Investment: ${this.annualInvestment()}`);
-    console.log(`Duration: ${this.duration()}`);
-    console.log(`Expected Return: ${this.expectedReturn()}`);
     this.isSubmited.set(true);
+    const userInput: UserInput = {
+      initialInvestment: parseFloat(this.initialInvestment()),
+      annualInvestment: parseFloat(this.annualInvestment()),
+      duration: parseInt(this.duration(), 10),
+      expectedReturn: parseFloat(this.expectedReturn()),
+    };
+    this.investmentResultsService.calculateInvestmentResults(userInput);
   }
 }
