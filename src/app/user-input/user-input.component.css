@@ -54,3 +54,8 @@ button {
 button:hover {
   background-color: #aaf1d6;
 }
+
+p {
+  text-align: center;
+  opacity: 0.8;
+}
